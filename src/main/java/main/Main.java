@@ -74,7 +74,9 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 			menuStage.setResizable(true);
 			GUI gui = new GUI(masterJDA, menuStage);
 			menuStage.setTitle(WINDOW_TITLE + " - " + gui.getGlobalTitle());
-			masterJDA = JDABuilder.createDefault("NzA5ODY1Nzk1MzY2Mjg5NTYx.XuLCLQ.wwjRHQ5I1nOXfau5OQ1SbEYp100").build();
+			//URGENT: CREATE A TOKEN READER CLASS THAT READS "token.bof" FILE FROM THE "data/tokens" FOLDER TO MAKE GITHUB REPOSITORY PUBLIC. 
+			//THE TOKEN FILE MUST NOT BE COMMITTED TO GITHUB.
+			masterJDA = JDABuilder.createDefault("NzA5ODY1Nzk1MzY2Mjg5NTYx.XrsICg.eK0c6A6AvuIhsCESQcFtuoy7wCw").build();
 			ConnectionHandler ch = new ConnectionHandler(botStatus, masterJDA);
 			masterJDA.addEventListener(ch);
 			commandShell shell = new commandShell(menuStage);
