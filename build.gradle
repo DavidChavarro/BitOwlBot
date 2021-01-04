@@ -36,7 +36,8 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
     
-     compile 'net.dv8tion:JDA:4.1.1_165'
+    //Dependencies for JDA bot
+     compile 'net.dv8tion:JDA:4.2.0_225'
 }
 
 compileJava.options.encoding = 'UTF-8'
