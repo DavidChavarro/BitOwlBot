@@ -6,25 +6,49 @@
  * User Manual available at https://docs.gradle.org/6.0/userguide/java_library_plugin.html
  */
 
+
+
+
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
     id 'java'
   id 'application'
   id 'com.github.johnrengelman.shadow' version '4.0.4'
+  //Javafx plug-ins
+  id 'org.openjfx.javafxplugin' version '0.0.9'
 }
 
-mainClassName = 'master.Bootloader'
+mainClassName = 'main.BootLoader'
 
 version = '1.0'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 11
+javafx {
+	version = "11.0.2"
+	modules = ['javafx.controls', 'javafx.fxml']
+}
+
+
 
 repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
 }
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'org.openjfx.javafxplugin'
+jar {
+	manifest {
+		attributes 'Main-Class' : mainClassName,
+		'Class-Path': configurations.runtime.files.collect {"$it.name"}.join(' ')
+	}
+
+}
+
+
+
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
@@ -37,7 +61,21 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     
     //Dependencies for JDA bot
-     compile 'net.dv8tion:JDA:4.2.0_225'
+     api 'net.dv8tion:JDA:4.2.0_225'
+     
+     
 }
 
+task customFatJar(type: Jar) {
+	manifest {
+		attributes 'Main-Class': mainClassName
+	}
+	baseName = 'BitOwl Bot Discord Control Panel'
+	from {configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } } 
+	with jar
+}
+
+
+
 compileJava.options.encoding = 'UTF-8'
+

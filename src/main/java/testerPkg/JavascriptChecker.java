@@ -1,10 +1,11 @@
 package testerPkg;
 import javax.script.*;
-
+//import org.graalvm.polygot.*;
 
 public class JavascriptChecker {
 //Checks if javascript engine is installed.
 	public static void main(String[] args) {
+		System.out.println("Printing all installed engines...");
 		final ScriptEngineManager manager = new ScriptEngineManager();
 		for (final ScriptEngineFactory scriptEngine : manager.getEngineFactories())
 		{
@@ -20,6 +21,7 @@ public class JavascriptChecker {
 		      System.out.println(engineAlias + " ");
 		   }
 		}
+		System.out.println("Done.");
 	}
 
 }

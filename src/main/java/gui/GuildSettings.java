@@ -38,9 +38,7 @@ public class GuildSettings extends GUI {
 	private final boolean DEVELOPMENT_FINISHED = false; //Variable determines if window development is not finished.
 	//More details shown when selected.
 	
-	public GuildSettings() {
-		
-	}
+	
 	
 	
 	public GuildSettings(JDA bot, Stage main) {
@@ -50,6 +48,28 @@ public class GuildSettings extends GUI {
 		gsMain = new Scene(ap, STAGE_WIDTH, STAGE_HEIGHT);
 		//glMain.getStylesheets().add(GuildList.class.getResource("application.css").toExternalForm());
 	}
+
+
+
+
+
+
+
+
+
+public GuildSettings() {
+	ap = new AnchorPane();
+	gsMain = new Scene(ap, STAGE_WIDTH, STAGE_HEIGHT);
+	}
+
+
+
+
+
+
+
+
+
 @FXML
 	public void start() {//Opens guild list stage.
 		try {

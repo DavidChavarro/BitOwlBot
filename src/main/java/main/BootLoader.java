@@ -2,6 +2,7 @@ package main;
 
 import java.io.IOException;
 
+//Launches the JavaFX application located in Main.java
 
 public class BootLoader {
 

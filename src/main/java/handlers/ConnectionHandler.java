@@ -24,7 +24,6 @@ public class ConnectionHandler extends ListenerAdapter {
 	} 
 	
 	
-	@SuppressWarnings("exports")
 	public void onDisconnect(DisconnectEvent e) {
 		System.out.println("\nBot is offline. Check host connection.\n");
 		botIsOnline = false;
@@ -32,7 +31,6 @@ public class ConnectionHandler extends ListenerAdapter {
 		main.updateStatLabel(botIsOnline);
 	}
 	
-	@SuppressWarnings("exports") 
 	public void onReconnect(ReconnectedEvent e) {
 		System.out.println("\nBot has successfully reconnected to the Discord server.\n");
 		botIsOnline = true;
@@ -40,7 +38,6 @@ public class ConnectionHandler extends ListenerAdapter {
 		main.updateStatLabel(botIsOnline);
 	}
 	
-	@SuppressWarnings("exports")
 	public void onReady(ReadyEvent e) {
 		System.out.println("BitOwl has detected that it is online");
 		botIsOnline = true;

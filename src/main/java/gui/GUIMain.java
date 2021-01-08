@@ -30,7 +30,7 @@ public class GUIMain extends GUI implements InfoRetrieveable {
 		@Override
 		public void handle(MouseEvent event) {
 			//System.out.println("\nMouse clicked.\n");
-			GuildSettings guildList = new GuildSettings(bot, stage);
+			GuildSettings guildList = new GuildSettings();
 			guildList.start();
 		}
 	};

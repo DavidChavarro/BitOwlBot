@@ -31,7 +31,7 @@ public class commandShell extends ListenerAdapter implements InfoRetrieveable {
 
 	}
 
-	@SuppressWarnings("exports")
+
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
 
