@@ -1,0 +1,3 @@
+COMMAND LINE ARGUMENTS TO LINK DEPENDENCIES TO JAVAFX .so FILES WHEN LAUNCHING RUNNABLE JAR FILE
+Replace <> with JAVAFX SO FILE LOCATION and x with program version:
+java -Djava.library.path= <JAVAFX SO FILE LOCATION> -jar BitOwl-Bot-Alpha-vx_x_x.jar
