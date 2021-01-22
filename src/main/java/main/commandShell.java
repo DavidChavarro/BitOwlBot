@@ -1,7 +1,7 @@
 package main;
 
 import gui.GUI;
-import gui.GUIMain;
+//import gui.GUIMain;
 import guildObjects.Member;
 import interfaces.InfoRetrieveable;
 import javafx.stage.Stage;
@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import shellPrograms.Hello;
 import shellPrograms.Help;
 import shellPrograms.Quotes;
-import shellPrograms.Registration;
+//import shellPrograms.Registration;
 
 public class commandShell extends ListenerAdapter implements InfoRetrieveable {
 	public final char CMD_PREFIX = '!';

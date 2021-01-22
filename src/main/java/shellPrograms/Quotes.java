@@ -20,7 +20,7 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 	private String[][] data;
 	private int categoryCount; // Count of different categories that can be invoked.
 	private int maxQuote; // The highest amount of quote a category has/
-	private boolean handlingNullIndex = false; //indicates whether program is handling null index.
+	//private boolean handlingNullIndex = false; //indicates whether program is handling null index.
 	private String errorStack;
 
 	public Quotes(GuildMessageReceivedEvent e, String cmdArgs) {
@@ -120,6 +120,11 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 		try {
 			Random categoryRand;
 			Random quoteRand;
+			if (cmdArgs.contentEquals("list")) {
+				//CREATE PERMANENT SOLUTION WHERE PROGRAM READS ALL CATEGORIES
+				//Temporary fix.
+				output = "Here are the categories: `fine`, `joshua`, `jurassic Park`, `programming`, and `terminator`.";
+			}
 			while (output == null) {
 				System.out.println("Is output null? " + (output == null));
 				if (transverseCount > categoryCount) {
@@ -208,9 +213,9 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 				} else {
 					System.out.println("Bypassed line as the first char is '" + tempData.charAt(0) + "'.");
 				}
-				// methodScanner.close();
+				
 			}
-
+			methodScanner.close();
 		} catch (FileNotFoundException fe) {
 			System.out.println(
 					"toDataArray method failed to convert assign data array because it failed to find data file.\nPrinting stack trace...\n");
@@ -239,10 +244,13 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 		}
 		return -1;
 	}
-
-	private void errorToString() {
+	
+	
+	//WORK ON EXPORTING ERROR TO STRING
+	/*private void errorToString() {
 
 	}
+	*/
 	
 	public String GET_DATA_PATH() {
 		if (OPERATING_SYSTEM.equals("Linux")) {

@@ -1,7 +1,7 @@
 package gui;
 
 import interfaces.InfoRetrieveable;
-import javafx.application.Application;
+//import javafx.application.Application;
 import javafx.stage.Stage;
 import net.dv8tion.jda.api.JDA;
 
