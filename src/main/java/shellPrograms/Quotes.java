@@ -252,11 +252,14 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 	}
 	*/
 	
-	public String GET_DATA_PATH() {
+	public String GET_DATA_PATH() { //Returns appropriate data path depending on the platform
+		//the program is compiled for.
 		if (OPERATING_SYSTEM.equals("Linux")) {
 			return LINUX_DATA_PATH;
-		} else {
+		} else if (OPERATING_SYSTEM.equals("Windows")) {
 			return WINDOWS_DATA_PATH;
+		} else {
+			return null;
 		}
 	}
 }
