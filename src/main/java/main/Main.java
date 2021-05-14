@@ -30,9 +30,11 @@ import java.time.LocalDateTime;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -51,7 +53,9 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 	@FXML
 	// DO NOT MAKE THE LABEL STATIC OR AN IllegalStateException WILL BE THROWN
 	private Label botStatus = new Label("Signing in...");
-
+	@FXML
+	private Parent root;
+	
 	public static void main(String[] args) throws IOException, InterruptedException {
 		launch(args);
 	}
@@ -72,7 +76,7 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 			//CONVERT ALL GUI OBJECTS TO STATIC REFERENCES
 			menuStage.setResizable(true);
 			GUI gui = new GUI(masterJDA, menuStage);
-			menuStage.setTitle(WINDOW_TITLE + " - " + gui.getGlobalTitle());
+			menuStage.setTitle(WINDOW_TITLE + " - " + GUI.getGlobalTitle());
 			//URGENT: CREATE A TOKEN READER CLASS THAT READS "token.bof" FILE FROM THE "data/tokens" FOLDER TO MAKE GITHUB REPOSITORY PUBLIC. 
 			//THE TOKEN FILE MUST NOT BE COMMITTED TO GITHUB.
 			masterJDA = JDABuilder.createDefault("NzA5ODY1Nzk1MzY2Mjg5NTYx.XrsICg.eK0c6A6AvuIhsCESQcFtuoy7wCw").build();
@@ -102,6 +106,7 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 			listButton.setFont(Font.font(main.getBodyFontSize()));
 			AnchorPane.setRightAnchor(listButton, main.getScaledSize(350.00));
 			AnchorPane.setBottomAnchor(listButton, main.getScaledSize(5.00));
+			//root = FXMLLoader.load(Main.class.getClass().getResource("Guildlist.fxml"));
 			ap.getChildren().addAll(botStatus, shutdownBot, listButton);
 			GUIMain guiHandler = new GUIMain(masterJDA, menuStage);
 			shutdownBot.addEventFilter(MouseEvent.MOUSE_CLICKED, guiHandler.shutdownButton);
