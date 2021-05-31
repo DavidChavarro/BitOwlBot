@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 import exceptions.IterationLimitReachedException;
+import exceptions.NullEnvVarException;
 import interfaces.InfoRetrieveable;
 import interfaces.Loadable;
 import main.commandShell;
@@ -15,7 +16,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable {
 	private File sourceFile;
-	private String SOURCE_DIRECTORY = GET_DATA_PATH() + "quotes.bof";
+	private String sourceDirectory;
 	private Scanner fileScanner;
 	private String[][] data;
 	private int categoryCount; // Count of different categories that can be invoked.
@@ -25,8 +26,14 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 
 	public Quotes(GuildMessageReceivedEvent e, String cmdArgs) {
 		super(e, cmdArgs);
-		sourceFile = new File(SOURCE_DIRECTORY);
-		categoryCount = 0;
+		try {
+			this.sourceDirectory = GET_DATA_PATH() + "quotes.bof";
+			this.sourceFile = new File(this.sourceDirectory);
+		} catch (NullEnvVarException e1) {
+			this.sourceDirectory = "null";
+			e1.printStackTrace();
+		}
+		this.categoryCount = 0;
 	}
 
 	@Override
@@ -39,8 +46,9 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 			quote = getQuote(); // Gets quote from data.
 			if (quote.contentEquals("")) {
 				System.out.println("System detected quote category does not exist. Throwing exception\n");
-				throw new IllegalArgumentException();
-			} else {
+				throw new NullPointerException();
+			}
+			else {
 				commandShell cs = new commandShell();
 				String userMention = cs.getMentionString(event);
 				quote = String.format(quote, userMention);
@@ -49,19 +57,28 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (NullPointerException npe) {
-			StringWriter npeString = new StringWriter();
-			PrintWriter npePrinter = new PrintWriter(npeString);
-			quote = "I'm sorry, but there was a problem getting a quote. Please report this error to <@"
-					+ BOT_CREATOR_ID + "> on Discord or Twitter, or e-mail him at david.e.chavarro@outlook.com:\n";
-			npe.printStackTrace(npePrinter);
-			quote += npePrinter.toString();
 		} catch (IllegalArgumentException iae) {
-			System.out.println("Catching exception.");
-			quote = "The quote category \"" + cmdArgs + "\" does not exist.\nType `!quote list` if you want to see all the quote categories I could say.\nOtherwise, only type `!quote` if you want me to say any quote.\nError code: IllegalArgumentException";
+			StringWriter iaeString = new StringWriter();
+			PrintWriter iaePrinter = new PrintWriter(iaeString);
+			quote = "The quote category you have entered does not exist. ";
+			quote += "To see the full list, type `!quote list`. ";
+			quote+= "If you want me to say any quote, type `!quote`.";
+			iae.printStackTrace(iaePrinter);
+			quote += "\nError name: `IllegalArgumentException`\n";
+			iae.printStackTrace();
 		} catch (IterationLimitReachedException ilre) {
 
-		} finally {
+		} catch (NullEnvVarException nev){
+			StringWriter nevString = new StringWriter();
+			PrintWriter nevPrinter = new PrintWriter(nevString);
+			quote = "I'm sorry, but there was a problem getting a quote. Please report this error to <@"
+					+ BOT_CREATOR_ID + "> on Discord or Twitter, or e-mail him at david.e.chavarro@outlook.com:\n";
+			nev.printStackTrace(nevPrinter);
+			quote += "Error name: `NullEnvVarException`\n";
+			quote += "Requested variable name: `BITOWL_DATA`";
+			nev.printStackTrace();
+		} 
+		finally {
 			// System.out.println("Sending error message to Discord chat...");
 			event.getChannel().sendMessage(quote).queue();
 			// System.out.println("Done!");
@@ -101,7 +118,7 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 			toDataArray();
 			System.out.println("\ntoDataArray stack finished executing.\n");
 		} catch (FileNotFoundException e) {
-			System.out.println("Could not update data because the \"" + SOURCE_DIRECTORY
+			System.out.println("Could not update data because the \"" + sourceDirectory
 					+ "\" file could not be found.\nShowing stack trace...\n");
 			e.printStackTrace();
 			errorStack = e.getStackTrace().toString();
@@ -110,7 +127,7 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 
 	}
 
-	private String getQuote() throws NullPointerException, IllegalArgumentException, IterationLimitReachedException { // Retrieves																											// arguments.
+	private String getQuote() throws NullPointerException, IllegalArgumentException, IterationLimitReachedException, NullEnvVarException { // Retrieves																											// arguments.
 		int category = 0;
 		int quoteIndex = 0;
 		int requestedCat = -1;// Holds random value to retrieve quote category
@@ -143,6 +160,8 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 							+ cmdArgs + "\", which is in category index " + requestedCat + ".");
 				}
 				if (requestedCat == -1) {
+					if (sourceDirectory.equals("null"))
+						throw new NullEnvVarException("BITOWL_DATA");
 					throw new IllegalArgumentException();
 				} else {
 					output = "##";
@@ -252,14 +271,13 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 	}
 	*/
 	
-	public String GET_DATA_PATH() { //Returns appropriate data path depending on the platform
+	public String GET_DATA_PATH() throws NullEnvVarException { //Returns appropriate data path depending on the platform
 		//the program is compiled for.
-		if (OPERATING_SYSTEM.equals("Linux")) {
-			return LINUX_DATA_PATH;
-		} else if (OPERATING_SYSTEM.equals("Windows")) {
-			return WINDOWS_DATA_PATH;
-		} else {
-			return null;
+		try {
+			return System.getenv(DATA_ENV_VARIABLE);
+		} catch (NullPointerException npe) {
+			NullEnvVarException ne = new NullEnvVarException(DATA_ENV_VARIABLE);
+			throw ne;
 		}
 	}
 }
