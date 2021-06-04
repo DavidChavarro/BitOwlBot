@@ -2,6 +2,7 @@ package gui;
 
 import java.io.IOException;
 
+import interfaces.Loadable;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,9 +21,11 @@ import javafx.stage.Stage;
 import net.dv8tion.jda.api.JDA;
 
 
-public class GuildList extends GUI {
+public class GuildList extends GUI implements Loadable
+{
 
 	public Stage guildList = new Stage();//Stage showing lists of guilds.
+    private String apFXML = System.getenv(RESOURCES_ENV_VAR);
 	public AnchorPane ap = new AnchorPane();
 	public Scene glMain;
 	public String windowTitle = "Guild List";//Name shown pertaining to window.
@@ -92,5 +95,6 @@ public class GuildList extends GUI {
 			guildList.close();
 		}
 	};
-	
+
+
 }

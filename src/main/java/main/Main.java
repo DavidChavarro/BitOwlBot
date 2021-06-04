@@ -1,6 +1,7 @@
 package main;
 
 
+import exceptions.NullEnvVarException;
 import net.dv8tion.jda.api.*;
 //import net.dv8tion.jda.api.entities.Activity.ActivityType;
 //import net.dv8tion.jda.api.entities.TextChannel;
@@ -38,6 +39,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+
+import static interfaces.Loadable.RESOURCES_ENV_VAR;
 
 public class Main extends Application implements Loggable, InfoRetrieveable {
 
@@ -106,7 +109,10 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 			listButton.setFont(Font.font(main.getBodyFontSize()));
 			AnchorPane.setRightAnchor(listButton, main.getScaledSize(350.00));
 			AnchorPane.setBottomAnchor(listButton, main.getScaledSize(5.00));
-			//root = FXMLLoader.load(Main.class.getClass().getResource("Guildlist.fxml"));
+			//System.out.println(System.getenv("BITOWL_RESOURCES"));
+			//String mainFXML = getEnvPath(RESOURCES_ENV_VAR);
+			//mainFXML += "Main.fxml";
+			//root = FXMLLoader.load(Main.class.getClass().getResource(mainFXML));
 			ap.getChildren().addAll(botStatus, shutdownBot, listButton);
 			GUIMain guiHandler = new GUIMain(masterJDA, menuStage);
 			shutdownBot.addEventFilter(MouseEvent.MOUSE_CLICKED, guiHandler.shutdownButton);
@@ -168,13 +174,28 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 
 	public void updateStatLabel(boolean botIsOnline) {
 		if (botIsOnline) {
-			System.out.println("\n\"updateStatLabel\" is updating stat label as online.\n");
 			botStatus.setStyle("-fx-test-fill: green;");
 			botStatus.setText("Online.");
 		} else {
-			System.out.println("\n\"updateStatLabel\" is updating stat label as online.\n");
 			botStatus.setStyle("-fx-test-fill: red;");
 			botStatus.setText("Offline.");
 		}
 	}
+
+	//Returns path to home directory.
+	private String getEnvPath(String environmentName) throws NullEnvVarException {
+        try {
+            String dataPath = System.getenv(environmentName);
+            assert(dataPath.equals("null") == false);
+            if (OPERATING_SYSTEM.equals("Windows")) {
+                dataPath+="\\";
+            } else {
+                dataPath+="/";
+            }
+            return dataPath;
+        } catch (NullPointerException npe) {
+            NullEnvVarException ne = new NullEnvVarException(environmentName);
+            throw ne;
+        }
+    }
 }

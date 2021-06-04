@@ -14,6 +14,8 @@ import interfaces.Loadable;
 import main.commandShell;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+//DEVELOPER'S NOTE: IMPLEMENT THE CONSTANT METHOD GET_ENV_PATH TO OPEN quotes.bof FILE.
+
 public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable {
 	private File sourceFile;
 	private String sourceDirectory;
@@ -27,7 +29,7 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 	public Quotes(GuildMessageReceivedEvent e, String cmdArgs) {
 		super(e, cmdArgs);
 		try {
-			this.sourceDirectory = GET_DATA_PATH() + "quotes.bof";
+			this.sourceDirectory = getDataPath() + "quotes.bof";
 			this.sourceFile = new File(this.sourceDirectory);
 		} catch (NullEnvVarException e1) {
 			this.sourceDirectory = "null";
@@ -39,13 +41,11 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 	@Override
 	public void start() throws NullPointerException {
 		updateData(); // Extracts data from data file to program.
-		System.out.println("\nupdateData method finished executing.");
 		String quote = "";
 		event.getChannel().sendTyping().queue();
 		try {
 			quote = getQuote(); // Gets quote from data.
 			if (quote.contentEquals("")) {
-				System.out.println("System detected quote category does not exist. Throwing exception\n");
 				throw new NullPointerException();
 			}
 			else {
@@ -55,7 +55,6 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 				Thread.sleep(250);
 			}
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalArgumentException iae) {
 			StringWriter iaeString = new StringWriter();
@@ -79,9 +78,7 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 			nev.printStackTrace();
 		} 
 		finally {
-			// System.out.println("Sending error message to Discord chat...");
 			event.getChannel().sendMessage(quote).queue();
-			// System.out.println("Done!");
 		}
 
 	}
@@ -94,21 +91,16 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 			int tempQuoteCount = 0;// default value for temporary count of quotes per line.
 			String rawData = "##";// Sets to blank value
 			while (fileScanner.hasNext()) {// Loop determines the dimensions of data array.
-				System.out.println("Traversing to next line");
 				rawData = fileScanner.nextLine();
-				System.out.println("Raw data in line: " + rawData);
 				if (rawData.substring(0, 2).equals(FILE_COMMENT) == false) {// Following code executes if
 					// LINE 57 THROWS StringIndexOutOfBoundException. // line is not comment.
 					if (rawData.charAt(0) == '[') {// Examines line if first char denotes a quote
 													// category
 						tempQuoteCount = countQuotes(rawData);
-						System.out.println("Quotes counted in line: " + tempQuoteCount);
 						if (tempQuoteCount > tempQuoteMax) {
-							System.out.println("Quote Max Updated");
 							tempQuoteMax = tempQuoteCount;
 						}
 						tempCatCount++;
-						System.out.println("\nupdateData(): temp category count increased to " + tempCatCount + ".\n");
 					}
 				}
 			}
@@ -116,7 +108,6 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 			maxQuote = tempQuoteMax;
 			fileScanner.close();
 			toDataArray();
-			System.out.println("\ntoDataArray stack finished executing.\n");
 		} catch (FileNotFoundException e) {
 			System.out.println("Could not update data because the \"" + sourceDirectory
 					+ "\" file could not be found.\nShowing stack trace...\n");
@@ -138,9 +129,19 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 			Random categoryRand;
 			Random quoteRand;
 			if (cmdArgs.contentEquals("list")) {
-				//CREATE PERMANENT SOLUTION WHERE PROGRAM READS ALL CATEGORIES
-				//Temporary fix.
-				output = "Here are the categories: `fine`, `joshua`, `jurassic Park`, `programming`, and `terminator`.";
+				output = "Here are the categories: ";
+				for (requestedCat = 0; requestedCat < categoryCount; requestedCat++) {
+				    if (requestedCat==categoryCount - 1) {
+				        output += "and ";
+                    }
+				    output+= "`" + data[requestedCat][0] + "`";
+				    if (requestedCat==categoryCount - 1) {
+				        output+= ".";
+                    } else {
+				        output+= ",";
+                    }
+				    output+= " ";
+                }
 			}
 			while (output == null) {
 				System.out.println("Is output null? " + (output == null));
@@ -270,11 +271,17 @@ public class Quotes extends ShellPrograms implements Loadable, InfoRetrieveable 
 
 	}
 	*/
-	
-	public String GET_DATA_PATH() throws NullEnvVarException { //Returns appropriate data path depending on the platform
+
+	public String getDataPath() throws NullEnvVarException { //Returns appropriate data path depending on the platform
 		//the program is compiled for.
 		try {
-			return System.getenv(DATA_ENV_VARIABLE);
+			String dataPath = System.getenv(DATA_ENV_VARIABLE);
+			if (OPERATING_SYSTEM.equals("Windows")) {
+				dataPath+="\\";
+			} else {
+				dataPath+="/";
+			}
+			return dataPath;
 		} catch (NullPointerException npe) {
 			NullEnvVarException ne = new NullEnvVarException(DATA_ENV_VARIABLE);
 			throw ne;
