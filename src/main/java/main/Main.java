@@ -44,7 +44,7 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 	private static JDA masterJDA;
 	private static GuildList gl;
 	private static final String WINDOW_TITLE = "Control Panel";
-	//private Stage menuStage = new Stage();
+	private static final String BOT_TOKEN = System.getenv("BITOWL_TOKEN");
 	private static GUIMain main;
 	@FXML
 	private AnchorPane ap = new AnchorPane();
@@ -55,6 +55,14 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 	private Label botStatus = new Label("Signing in...");
 	@FXML
 	private Parent root;
+
+	private static String botStatStyle =  "-fx-text-fill: green;";
+
+	private static String botStatText = "";
+
+	private static boolean isRunning = false;
+
+	private static boolean updateStage = false;
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
 		launch(args);
@@ -79,8 +87,8 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 			menuStage.setTitle(WINDOW_TITLE + " - " + GUI.getGlobalTitle());
 			//URGENT: CREATE A TOKEN READER CLASS THAT READS "token.bof" FILE FROM THE "data/tokens" FOLDER TO MAKE GITHUB REPOSITORY PUBLIC. 
 			//THE TOKEN FILE MUST NOT BE COMMITTED TO GITHUB.
-			masterJDA = JDABuilder.createDefault("NzA5ODY1Nzk1MzY2Mjg5NTYx.XrsICg.eK0c6A6AvuIhsCESQcFtuoy7wCw").build();
-			
+			masterJDA = JDABuilder.createDefault(BOT_TOKEN).build();
+
 			//COMMIT FINAL VERSION ONCE getToken method is implemented
 			//masterJDA = JDABuilder.createDefault(TokenAccessor.getToken()).build();
 			ConnectionHandler ch = new ConnectionHandler(botStatus, masterJDA);
@@ -104,13 +112,12 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 			shutdownBot.setFont(Font.font(main.getBodyFontSize()));
 			Button listButton = new Button("Guild lists");
 			listButton.setFont(Font.font(main.getBodyFontSize()));
-			AnchorPane.setRightAnchor(listButton, main.getScaledSize(350.00));
+			AnchorPane.setRightAnchor(listButton, main.getScaledSize(215.00));
 			AnchorPane.setBottomAnchor(listButton, main.getScaledSize(5.00));
 			//root = FXMLLoader.load(Main.class.getClass().getResource("Guildlist.fxml"));
 			ap.getChildren().addAll(botStatus, shutdownBot, listButton);
 			GUIMain guiHandler = new GUIMain(masterJDA, menuStage);
 			shutdownBot.addEventFilter(MouseEvent.MOUSE_CLICKED, guiHandler.shutdownButton);
-			
 			listButton.addEventFilter(MouseEvent.MOUSE_CLICKED, guiHandler.listButton);
 			home = main.setSceneResolution(this.home, ap);
 			menuStage.setScene(home);
@@ -118,15 +125,15 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 			gl = new GuildList(masterJDA.getGuilds());
 			gl.updateGuildList();
 			System.out.println("\nMain method is updating label...\n");
-			botStatus.setStyle("-fx-text-fill: green;");
-			botStatus.setText("Connected to " + gl.toString());
+			botStatus.setStyle(botStatStyle);
+			botStatText = "Connected to " + gl.toString();
+			botStatus.setText(botStatText);
 			botStatus.setMaxWidth(main.getScaledSize(2100));
 			botStatus.setWrapText(true);
 			menuStage.show();
 			currTime = LocalDateTime.now();
 			System.out.println("BitOwl has signed in to Discord at " + currTime.getHour() + ":" + currTime.getMinute() + ".");
 			//Developers Note: Create custom time class that formats 24 hours to 12 hours.
-
 		} catch (LoginException e) {
 			File logStream = new File(LINUX_LOG_PATH + "mainClassError.log");
 			Scanner logData = new Scanner(logStream);
@@ -149,7 +156,6 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 			System.out.println(errorMsg);
 			e.printStackTrace();
 		}
-
 	}
 
 	public Label getConnStatLabel() {
@@ -163,18 +169,18 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 	public static JDA getBot() {
 		return masterJDA;
 	}
-	
-	
 
-	public void updateStatLabel(boolean botIsOnline) {
+	public static void updateStatLabel(boolean botIsOnline) {
 		if (botIsOnline) {
 			System.out.println("\n\"updateStatLabel\" is updating stat label as online.\n");
-			botStatus.setStyle("-fx-test-fill: green;");
-			botStatus.setText("Online.");
+			botStatStyle = "-fx-test-fill: green;";
+			botStatText = "Connected to ";
 		} else {
 			System.out.println("\n\"updateStatLabel\" is updating stat label as online.\n");
-			botStatus.setStyle("-fx-test-fill: red;");
-			botStatus.setText("Offline.");
+			botStatStyle = "-fx-test-fill: red;";
+			botStatText = "Offline.";
 		}
 	}
+
+
 }
