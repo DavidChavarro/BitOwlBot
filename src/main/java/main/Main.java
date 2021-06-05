@@ -48,6 +48,7 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 	private static GuildList gl;
 	private static final String WINDOW_TITLE = "Control Panel";
 	//private Stage menuStage = new Stage();
+    private static final String BOT_TOKEN = System.getenv("BITOWL_TOKEN");
 	private static GUIMain main;
 	@FXML
 	private AnchorPane ap = new AnchorPane();
@@ -73,7 +74,7 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 	@Override
 	@FXML
 	public void start(Stage menuStage) throws Exception {// GUI driver
-		DateTimeFormatter USClock = DateTimeFormatter.ofPattern("mm/dd/yyyy");
+		DateTimeFormatter USClock = DateTimeFormatter.ofPattern("MM/DD/YYYY");
 		LocalDateTime currTime = LocalDateTime.now();
 		try {
 			//CONVERT ALL GUI OBJECTS TO STATIC REFERENCES
@@ -82,7 +83,7 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 			menuStage.setTitle(WINDOW_TITLE + " - " + GUI.getGlobalTitle());
 			//URGENT: CREATE A TOKEN READER CLASS THAT READS "token.bof" FILE FROM THE "data/tokens" FOLDER TO MAKE GITHUB REPOSITORY PUBLIC. 
 			//THE TOKEN FILE MUST NOT BE COMMITTED TO GITHUB.
-			masterJDA = JDABuilder.createDefault("NzA5ODY1Nzk1MzY2Mjg5NTYx.XrsICg.eK0c6A6AvuIhsCESQcFtuoy7wCw").build();
+			masterJDA = JDABuilder.createDefault(BOT_TOKEN).build();
 			
 			//COMMIT FINAL VERSION ONCE getToken method is implemented
 			//masterJDA = JDABuilder.createDefault(TokenAccessor.getToken()).build();
@@ -107,7 +108,7 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 			shutdownBot.setFont(Font.font(main.getBodyFontSize()));
 			Button listButton = new Button("Guild lists");
 			listButton.setFont(Font.font(main.getBodyFontSize()));
-			AnchorPane.setRightAnchor(listButton, main.getScaledSize(350.00));
+			AnchorPane.setRightAnchor(listButton, main.getScaledSize(215.00));
 			AnchorPane.setBottomAnchor(listButton, main.getScaledSize(5.00));
 			//System.out.println(System.getenv("BITOWL_RESOURCES"));
 			//String mainFXML = getEnvPath(RESOURCES_ENV_VAR);

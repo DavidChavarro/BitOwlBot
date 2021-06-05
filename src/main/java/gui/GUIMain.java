@@ -73,16 +73,16 @@ public class GUIMain extends GUI implements InfoRetrieveable {
 	
 	public int getBodyFontSize() {
 		if (OPERATING_SYSTEM.equals("Linux")) {
-			return 36;
+			return 24;
 		} else {
-			return 18;}
+			return 12;}
 		}
 	
 	public static int getBodyFontSizeStatic() {
 		if (OPERATING_SYSTEM.equals("Linux")) {
-			return 36;
+			return 24;
 		} else {
-			return 18;}
+			return 12;}
 		}
 	
 	
