@@ -79,7 +79,7 @@ public class GuildList {
 			}
 			//throw new GuildNotFoundException();
 		} catch (NullPointerException e) {
-			//System.out.println("Null pointer in guildList class.");
+			System.out.println("Null pointer in guildList class.");
 		}
 		return null;
 	}
@@ -101,51 +101,7 @@ public class GuildList {
 				return null;
 		}
 	}
-		/*public Guild getGuildByName(String name) {
-		//System.out.println("Search method executing with index '" + name + "'.");
-		if (guildList.size() == 0) {
-			//System.out.println("getGuildByName caught list size as 0.");
-			//throw new GuildListEmptyException();
-		}
-		try {
-			//System.out.println("Getting top guild...");
-			//System.out.println("Starting search");
-			Guild tempGuild = top;
-			//System.out.println("Caught top guild...");
-			int index = 0;
-			boolean isFound = false;
-			String guildName;
-			while (index < guildList.size()) {
-				guildName = tempGuild.getName();
-				//System.out.println("Guildname = " + guildName);
-				if (guildName.equals(name)) {
-					//System.out.println("FOUND");
-					return tempGuild;
-				}
-				tempGuild = tempGuild.next;
-				index++;
-			}
-			//System.out.println("Not found");
-			//throw new GuildNotFoundException();
-		} catch (NullPointerException e) {
-			System.out.println("Null pointer in guildList class.");
-		}
-		return null;
-	}
 
-	public List<net.dv8tion.jda.api.entities.Guild> getGuildData() {
-		return guildList;
-	}
-
-	public void setGuildList(List<net.dv8tion.jda.api.entities.Guild> guildList) {
-		this.guildList = guildList;
-	}
-
-
-    public final JDA GET_JDA()
-    {
-        return BOT;
-    }*/
 	
 
 }

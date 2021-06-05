@@ -16,34 +16,31 @@ public class ConnectionHandler extends ListenerAdapter {
 	boolean botIsOnline;
 	GuildList gl;
 	
-	public ConnectionHandler(Label botStatus, JDA bot) {
+	public ConnectionHandler(Label botStatus, JDA bot) throws InterruptedException
+    {
 		this.botStatus = botStatus;
 		this.bot = bot;
-		this.gl = Main.getGuildList();
 		botIsOnline = false;
-	} 
-	
-	
+	}
+
+
 	public void onDisconnect(DisconnectEvent e) {
 		System.out.println("\nBot is offline. Check host connection.\n");
 		botIsOnline = false;
-		Main main = new Main();
-		main.updateStatLabel(botIsOnline);
-	}
-	
+		updateStatLabel(botIsOnline);
+    }
+
 	public void onReconnect(ReconnectedEvent e) {
 		System.out.println("\nBot has successfully reconnected to the Discord server.\n");
 		botIsOnline = true;
-		Main main = new Main();
-		main.updateStatLabel(botIsOnline);
-	}
+		updateStatLabel(botIsOnline);
+    }
 	
 	public void onReady(ReadyEvent e) {
 		System.out.println("BitOwl has detected that it is online");
 		botIsOnline = true;
-		Main main = new Main();
-		main.updateStatLabel(botIsOnline);
-	}
+		updateStatLabel(botIsOnline);
+    }
 	
 	
 	
@@ -52,6 +49,17 @@ public class ConnectionHandler extends ListenerAdapter {
 		this.bot = bot;
 		this.gl = Main.getGuildList();
 	}
+
+    private void updateStatLabel(boolean botIsOnline)
+    {
+        if (botIsOnline) {
+            botStatus.setStyle("-fx-test-fill: green;");
+            botStatus.setText("Connected to: " + Main.getGuildList().toString());
+        } else {
+            botStatus.setStyle("-fx-test-fill: red;");
+            botStatus.setText("Offline.");
+        }
+    }
 	
 	
 	
