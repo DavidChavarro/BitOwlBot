@@ -13,7 +13,7 @@ public class GuildList {
 		this.guildList = guildList;
     }
 
-
+    //Returns all the guilds the bot is connected to as a string.
     public String toString() {
 		String output = "";
 		for (int i = 0 ; i < guildList.size(); i++) {
@@ -29,7 +29,8 @@ public class GuildList {
 		}
 		return output;
 	}
-	
+
+	//Updates the guilds that the bot is connected to.
 	public void updateGuildList() {
 		int size = guildList.size();
 		System.out.println("List size: " + size);
@@ -43,7 +44,8 @@ public class GuildList {
 			//System.out.println("done\n");
 		}
 	}
-	
+
+	//Adds a guild to the list.
 	protected void addGuild(net.dv8tion.jda.api.entities.Guild object) {
 		//System.out.println("Adding new guild...");
 		Guild newGuild = new Guild(object);
@@ -60,7 +62,8 @@ public class GuildList {
 		end = newGuild;
 		//newGuild.updateUserList();
 	}
-	
+
+	//Returns the guild object by index.
 	public Guild getGuildByIndex(int i) {
 		if (guildList.size() == 0)
 			System.out.println("List size is 0.");
@@ -83,7 +86,8 @@ public class GuildList {
 		}
 		return null;
 	}
-	
+
+	//Returns the guild object by its id.
 	public Guild getGuildByID(long id) {
 		//Returns guild object by ID.
 		if (guildList.size() == 0) {

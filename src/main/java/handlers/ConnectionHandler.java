@@ -24,18 +24,21 @@ public class ConnectionHandler extends ListenerAdapter {
 	}
 
 
+	//Updates the GUI status label if bot is offline.
 	public void onDisconnect(DisconnectEvent e) {
 		System.out.println("\nBot is offline. Check host connection.\n");
 		botIsOnline = false;
 		updateStatLabel(botIsOnline);
     }
 
+    //Updates the GUI status label if bot is online.
 	public void onReconnect(ReconnectedEvent e) {
 		System.out.println("\nBot has successfully reconnected to the Discord server.\n");
 		botIsOnline = true;
 		updateStatLabel(botIsOnline);
     }
-	
+
+    //See onReconnect.
 	public void onReady(ReadyEvent e) {
 		System.out.println("BitOwl has detected that it is online");
 		botIsOnline = true;
@@ -50,6 +53,8 @@ public class ConnectionHandler extends ListenerAdapter {
 		this.gl = Main.getGuildList();
 	}
 
+	//Updates the botStatus label.
+    //Pre-condition: the botStatus object must be initialized.
     private void updateStatLabel(boolean botIsOnline)
     {
         if (botIsOnline) {

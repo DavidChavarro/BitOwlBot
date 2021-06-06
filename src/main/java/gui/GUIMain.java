@@ -32,13 +32,14 @@ public class GUIMain extends GUI implements InfoRetrieveable {
     private Scene home;
 	
 	public GUIMain(JDA bot, Stage main) throws InterruptedException
-    {//Constructs object by having JDA bot and main stage object passed.
+    {
 		super(bot, main);
 		ch = new ConnectionHandler(botStatus, bot);
 		run();
 	}
 
-	private void run() throws InterruptedException
+	//Initializes all the GUI objects and button handlers, then displays the main window.
+	private void run()
     {
         stage.setResizable(true);
         stage.setTitle(WINDOW_TITLE + " - " + getGlobalTitle());
@@ -82,7 +83,8 @@ public class GUIMain extends GUI implements InfoRetrieveable {
 			shutdownBot();
 		}
 	};
-	
+
+	//Opens the guild list window when corresponding button is clicked.
 	public EventHandler<MouseEvent> listButtonHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent event) {
@@ -90,19 +92,15 @@ public class GUIMain extends GUI implements InfoRetrieveable {
 			guildList.start();
 		}
 	};
-	
+
+	//Shuts downs the program.
 	private void shutdownBot() {
 		bot.shutdown();
 		stage.close();
 	}
 	
-	@SuppressWarnings("exports")
-	public JDA getJDA() {
-		return bot;
-	}
 	
-	
-	//NOTE TO DEVELOPER: Consider putting the following code under unique class GUIScaler.
+	//Sets an appropriate window resolution based on the Operating System it runs.
 	public Scene setSceneResolution(Scene home, AnchorPane ap) {
 		int x;
 		int y;
@@ -116,7 +114,8 @@ public class GUIMain extends GUI implements InfoRetrieveable {
 		home = new Scene(ap, x, y);
 		return home;
 	}
-	
+
+	//Scales the window size based on the operating system it runs.
 	public double getScaledSize(double maxSize) {
 		if (OPERATING_SYSTEM.equals("Linux")) {
 			return maxSize;
@@ -124,24 +123,23 @@ public class GUIMain extends GUI implements InfoRetrieveable {
 			return maxSize / 2;
 		}
 	}
-	
+
+
+	//Returns the body font size based on the operating system it runs.
 	public int getBodyFontSize() {
 		if (OPERATING_SYSTEM.equals("Linux")) {
 			return 24;
 		} else {
 			return 12;}
 		}
-	
+    //Returns the body font size based on the operating system it runs.
+    //Method is static.
 	public static int getBodyFontSizeStatic() {
 		if (OPERATING_SYSTEM.equals("Linux")) {
 			return 24;
 		} else {
 			return 12;}
 		}
-
-    public Label getConnStatLabel() {
-        return botStatus;
-    }
 
 
 

@@ -42,32 +42,25 @@ import javafx.scene.control.Label;
 
 import static interfaces.Loadable.RESOURCES_ENV_VAR;
 
+//Launches the program and selects whether to run in CLI or GUI mode depending
+//on cmd arguments.
 public class Main extends Application implements Loggable, InfoRetrieveable {
 
-    private commandShell shell;
-	private static JDA masterJDA;
-	private static GuildList gl;
+    private commandShell shell; //Controls the calling of shell programs.
+	private static JDA masterJDA; //Object that connects to Discord API.
+	private static GuildList gl; //Shows list of connected guilds.
 	private static final String WINDOW_TITLE = "Control Panel";
 	//private Stage menuStage = new Stage();
     private static final String BOT_TOKEN = System.getenv("BITOWL_TOKEN");
-	private static GUIMain main;
-    private DateTimeFormatter USClock = DateTimeFormatter.ofPattern("MM/DD/YYYY");
+	private static GUIMain main; //Holds main GUI elements
+    private DateTimeFormatter USClock = DateTimeFormatter.ofPattern("MM/DD/YYYY"); //Used to log connection time.
     private static LocalDateTime currTime;
-	@FXML
-	private AnchorPane ap = new AnchorPane();
-	@FXML
-	private Scene home;
-	@FXML
-	// DO NOT MAKE THE LABEL STATIC OR AN IllegalStateException WILL BE THROWN
-	private Label botStatus = new Label("Signing in...");
-	@FXML
-	private Parent root;
 	
-	public static synchronized void main(String[] args) throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException, InterruptedException {
         try
         {
             masterJDA = JDABuilder.createDefault(BOT_TOKEN).build();
-            if (args[0].equals("--cli") || args[0].equals("-c")) {
+            if (args[0].equals("--cli") || args[0].equals("-c")) {//Launch in CLI mode
                 commandShell shell = new commandShell();
                 masterJDA.addEventListener(shell);
                 MemberEventHandler memberEvent = new MemberEventHandler(masterJDA);
@@ -80,7 +73,7 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
                 currTime = LocalDateTime.now();
                 System.out.println("BitOwl has signed in to Discord at " + currTime.getHour() + ":" + currTime.getMinute() + ".");
             } else {
-                launch(args);
+                launch(args);//LAUNCH GUI MODE.
             }
 
         } catch (LoginException le) {
@@ -114,7 +107,7 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
 	}
 
 
-
+    //Returns the guild list object.
 	public static GuildList getGuildList() {
 	    return gl;
 	}
@@ -142,6 +135,7 @@ public class Main extends Application implements Loggable, InfoRetrieveable {
         }
     }
 
+    //Returns JDA object.
     public static JDA getBot() {
 	    return masterJDA;
     }

@@ -14,12 +14,11 @@ import shellPrograms.Help;
 import shellPrograms.Quotes;
 //import shellPrograms.Registration;
 
+
+//CLASS DEALS WITH COMMANDS SENT BY DISCORD USER AND CALLS A SHELL PROGRAM.
 public class commandShell extends ListenerAdapter implements InfoRetrieveable {
-	public final char CMD_PREFIX = '!';
-	// Activates bot.
+	public final char CMD_PREFIX = '!';//Prefix that calls bot from chat.
 	public final String SPACE_DELIM = "\\s+";
-	// Link to verification form for STS 1101 Discord server.
-	public final String STS1101_FORM = "https://forms.gle/z39y8QTuzrtLuHKB9";
 
 	public Stage mainStage;
 
@@ -33,6 +32,9 @@ public class commandShell extends ListenerAdapter implements InfoRetrieveable {
 
 
 	@Override
+    //Handles incoming guild messages.
+    //Post-condition: If user types message with pre-fix, the program calls
+    //the corresponding shell program or returns error if command is invalid.
 	public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
 
 		User name = e.getAuthor();
@@ -45,7 +47,6 @@ public class commandShell extends ListenerAdapter implements InfoRetrieveable {
 		try {
 			if (nameString.equals("U:BitOwl(709865795366289561)") == false && rawMessage != null) {
 				if (rawMessage.charAt(0) == CMD_PREFIX) {
-					System.out.println("Running method helper");
 					runMethodHelper(e, e.getMessage().getContentRaw());
 				}
 			}
@@ -79,13 +80,12 @@ public class commandShell extends ListenerAdapter implements InfoRetrieveable {
 		System.out.println(e.getMessage().getContentRaw() + "\n");
 	}
 
+	//Selects and executes the appropriate shell program.
+    //Pre-condition: The recieved message must include the prefix.
 	private void runMethodHelper(GuildMessageReceivedEvent e, String rawMessage) {
 		String cmdArgs = "";
-		System.out.println("Raw message: " + rawMessage);
-		System.out.println("splitting raw message");
 		String[] messageArr = rawMessage.split(" ");
 		if (messageArr.length > 1) {
-			System.out.println("Message array length is " + messageArr.length);
 			cmdArgs = getCommandArgs(messageArr);
 		}
 		switch (messageArr[0].substring(1)) {
@@ -133,6 +133,7 @@ public class commandShell extends ListenerAdapter implements InfoRetrieveable {
 		
 	}
 
+	//Splits the incoming message into an array and returns it.
 	private String getCommandArgs(String[] inputArr) {
 		String cmdArgs = "";
 		System.out.println("command args length: " + inputArr.length);
@@ -146,6 +147,7 @@ public class commandShell extends ListenerAdapter implements InfoRetrieveable {
 		return cmdArgs;
 	}
 
+	//Returns the string needed for the bot to mention a user.
 	public String getMentionString(@SuppressWarnings("exports") GuildMessageReceivedEvent e) {
 		Member idConverter = new Member();
 		return "<@" + idConverter.getID(e.getAuthor().toString()) + ">";

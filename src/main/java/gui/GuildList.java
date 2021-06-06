@@ -20,7 +20,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import net.dv8tion.jda.api.JDA;
 
-
+//This class manages the GUI components for the GuildList window.
 public class GuildList extends GUI implements Loadable
 {
 
