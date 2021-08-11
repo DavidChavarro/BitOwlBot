@@ -1,4 +1,0 @@
-module javafx11 {
-	requires javafx.controls;
-	exports javafx11;
-}
