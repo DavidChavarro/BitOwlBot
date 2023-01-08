@@ -1,22 +1,21 @@
-import discord
 import os
-from discord.ext import commands
-from discord_slash import SlashCommand, SlashContext
+import disnake
+from disnake.ext import commands
 
-class discordClient(discord.Client):
+class discordClient(disnake.Client):
     __is_online = False
-    bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
-    __slash = SlashCommand(bot)
-    
+    cmd_sync_flag = commands.CommandSyncFlags.default()
+    bot = commands.Bot(command_prefix="!", command_sync_flags=cmd_sync_flag)
+    inter = disnake.ApplicationCommandInteraction()
+
     async def on_ready(self):
         __is_online = True
         print("Connection established")
     
-    @__slash.slash(name="test")
-    async def _test(ctx: SlashContext):
-        embed = discord.Embed(title="test")
-        await ctx.send(content="/commands worked", embeds=[embed])
+    @bot.slash_command(description="This is a test command. It should respond with 'Test command successful.'")
+    async def test(inter):
+        await inter.response.send("Test command worked")
 
   
-
-discordClient.bot.run(os.getenv('BITOWL_TOKEN'))
+client = discordClient()
+client.bot.run(os.getenv('BITOWL_TOKEN'))

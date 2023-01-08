@@ -1,1 +1,2 @@
-discord.py[voice]
+discord.py[voice]==2.1.0
+disnake==2.7.0
